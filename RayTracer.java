@@ -1,3 +1,9 @@
+/**
+ * With great help from Fabien Sanglard
+ * 
+ * http://fabiensanglard.net/rayTracing_back_of_business_card/index.php
+ * 
+ */
 package com.jonjonsonjr.raytracer;
 
 import java.io.BufferedWriter;
