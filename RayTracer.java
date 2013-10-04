@@ -51,12 +51,12 @@ public class RayTracer {
 		
 		
 		if (m == 0) {
-			return new Vector(.7f, .6f, 1).scale((float) Math.pow(1.0f - d.z, 4));
+			return new Vector(.7f, .6f, 1).scale(pow(1 - d.z, 4));
 		}
 		
 		Vector h = o.add(d.scale(t));
 		Vector l = new Vector(9 + R(), 9 + R(), 16).add(h.scale(-1)).normalize();
-		Vector r = d.add(n.scale(n.dot(d) * -2.0f));
+		Vector r = d.add(n.scale(n.dot(d) * -2));
 		
 		float b = l.dot(n);
 		
@@ -72,12 +72,12 @@ public class RayTracer {
 			}
 		}
 		
-		float p = (float) Math.pow(l.dot(r) * (b > 0 ? 1.0f : 0.0f), 99);
+		float p = pow(l.dot(r) * (b > 0 ? 1 : 0), 99);
 				
 		if (m == 1) {
 			h = h.scale(.2f);
 			
-			if ((int) (ceil(h.x) + ceil(h.y)) % 2 == 1) {
+			if ((int) (ceil(h.x) + ceil(h.y)) % 2 == 0) {
 				return new Vector(3, 1, 1).scale(b * .2f + .1f);
 			} else { 
 				return new Vector(3, 3, 3).scale(b * .2f + .1f);
@@ -133,6 +133,10 @@ public class RayTracer {
 	
 	float ceil(float n) {
 		return (float) Math.ceil(n);
+	}
+	
+	float pow(float b, int e) {
+		return (float) Math.pow(b, e);
 	}
 	
 	class S {
