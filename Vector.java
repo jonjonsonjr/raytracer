@@ -2,9 +2,9 @@ package com.jonjonsonjr.raytracer;
 
 public class Vector {
 	
-	public float x;
-	public float y;
-	public float z;
+	public double x;
+	public double y;
+	public double z;
 	
 	public Vector() {
 		this.x = 0;
@@ -12,7 +12,7 @@ public class Vector {
 		this.z = 0;
 	}
 	
-	public Vector(float x, float y, float z) {
+	public Vector(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -22,11 +22,11 @@ public class Vector {
 		return new Vector(x + v.x, y + v.y, z + v.z);
 	}
 	
-	public Vector scale(float s) {
+	public Vector scale(double s) {
 		return new Vector(x * s, y * s, z * s);
 	}
 	
-	public float dot(Vector v) {
+	public double dot(Vector v) {
 		return x * v.x + y * v.y + z * v.z;
 	}
 
@@ -35,7 +35,7 @@ public class Vector {
 	}
 	
 	public Vector normalize() {
-		return this.scale(1.0f / (float) Math.sqrt(this.dot(this)));
+		return this.scale(1.0 / (double) Math.sqrt(this.dot(this)));
 	}
 	
 	public String toString() {
