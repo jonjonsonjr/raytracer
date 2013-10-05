@@ -29,7 +29,7 @@ public class RayTracer {
 			for (int x = 511; x >= 0; x--) {	// For each pixel in a line
 				
 				//Reuse the vector class to store not XYZ but a RGB pixel color
-				Vector p = new Vector(13, 13, 13);
+				Vector p = new Vector(13, 13, 13); // Default pixel color is almost pitch black
 				
 				//Cast 64 rays per pixel (For blur (stochastic sampling) and soft-shadows.
 				for (int r = 31; r >= 0; r--) {
@@ -44,7 +44,7 @@ public class RayTracer {
 						t.scale(-1)
 						 .add(
 							a.scale(R() + x)
-							 .add(b.scale(y + R()))
+							 .add(b.scale(R() + y))
 						     .add(c)
 						     .scale(16)
 						 ).normalize()
@@ -55,6 +55,9 @@ public class RayTracer {
 				out.write(String.format("%c%c%c", (int) p.x, (int) p.y, (int) p.z));
 			}
 		}
+		
+		out.flush();
+		out.close();
 	}
 	
 	// (S)ample the world and return the pixel color for
@@ -66,7 +69,6 @@ public class RayTracer {
 		
 		//Search for an intersection ray Vs World.
 		int m = s.m;
-		
 		
 		if (m == 0) {
 			//No sphere found and the ray goes upward: Generate a sky color
@@ -107,9 +109,15 @@ public class RayTracer {
 			}
 		}
 		
+		//A sphere was hit. Cast an ray bouncing from the sphere surface.
+		//Attenuate color by 50% since it is bouncing (* .5)
 		return new Vector(p, p, p).add(sample(h, r).scale(.5));
 	}
 	
+	//The intersection test for line [o,v].
+	// Return 2 if a hit was found (and also return distance t and bouncing ray n).
+	// Return 0 if no hit was found but ray goes upward
+	// Return 1 if no hit was found but ray goes downward
 	S trace(Vector o, Vector d) {
 		Vector n = new Vector();
 		double t = (double) 1e9;
@@ -122,18 +130,26 @@ public class RayTracer {
 			m = 1;
 		}
 		
-		for (int k = 18; k >= 0; k--) {
-			for (int j = 8; j >= 0; j--) {
-				if ((G[j] & 1 << k) != 0) { // Draw a ball here
+		//The world is encoded in G, with 9 lines and 19 columns
+		for (int k = 18; k >= 0; k--) {		//For each columns of objects
+			for (int j = 8; j >= 0; j--) {	//For each line on that columns
+				if ((G[j] & 1 << k) != 0) { //For this line j, is there a sphere at column i ?
+					
+					// There is a sphere but does the ray hits it ?
 					Vector vp = o.add(new Vector(-k, 0, -j - 4));
 					double b = vp.dot(d);
 					double c = vp.dot(vp) - 1;
 					double q = b * b - c;
 					
+					//Does the ray hit the sphere ?
 					if (q > 0) {
+						
+						//It does, compute the distance camera-sphere
 						double s = -b - sqrt(q);
 						
 						if (s < t && s > .01) {
+							// So far this is the minimum distance, save it. And also
+				            // compute the bouncing ray vector into 'n'  
 							t = s;
 							n = vp.add(d.scale(t)).normalize();
 							m = 2;
