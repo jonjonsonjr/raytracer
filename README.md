@@ -1,6 +1,7 @@
 raytracer
 =========
 
+This doesn't actually work, and I can't figure out why. Send me a pull request if you can!
 
 Java implementation of Paul Heckbert's business card raytracer
 
