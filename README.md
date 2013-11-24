@@ -3,6 +3,8 @@ raytracer
 
 This doesn't actually work, and I can't figure out why. Send me a pull request if you can!
 
+I did manage to get a [JavaScript version](https://github.com/jonjonsonjr/raytracer-js) working, though.
+
 Java implementation of Paul Heckbert's business card raytracer
 
 With thanks to [Fabien Sanglard](http://fabiensanglard.net/) for his 
